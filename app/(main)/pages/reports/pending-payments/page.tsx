@@ -387,7 +387,7 @@ const PendingPayments = () => {
   };
 
   return (
-    <div className="flex flex-column p-3 lg:p-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="flex flex-column p-3 lg:p-0" style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-4 gap-3">
         <h2 className="text-2xl m-0">Pending Transactions</h2>
          <span className="p-input-icon-left p-input-icon-right w-full">

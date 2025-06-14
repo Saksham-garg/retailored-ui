@@ -691,7 +691,7 @@ const SalesOrder = () => {
 
   if (loading && !isFetchingMore && !debouncedSearchTerm) {
     return (
-      <div className="flex flex-column p-3 lg:p-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="flex flex-column p-3 md:p-0" style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-4 gap-3 w-full">
           <Skeleton width="10rem" height="2rem" />
           <Skeleton width="100%" height="2.5rem" className="md:w-20rem" />
@@ -751,7 +751,7 @@ const SalesOrder = () => {
   }  
 
   return (
-    <div className="flex flex-column p-3 lg:p-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="flex flex-column p-3 lg:p-0" style={{ maxWidth: '1200px', margin: '0 auto' }}>
       {(isSaving || isSavingDetails) && <FullPageLoader />}
       <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-4 gap-3">
         <h2 className="text-2xl m-0">Sales Orders</h2>

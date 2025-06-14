@@ -268,7 +268,7 @@ const CustomerList = () => {
   
   if (isInitialLoading || error) {
     return (
-      <div className="flex flex-column p-3 lg:p-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="flex flex-column p-3 lg:p-0" style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-4 gap-3 w-full">
           <Skeleton width="10rem" height="1.5rem" />
           <Skeleton width="100%" height="2rem" className="md:w-20rem" />
@@ -303,7 +303,7 @@ const CustomerList = () => {
   return (
     <>
       {listLoading && <FullPageLoader />}
-      <div className="flex flex-column p-3 lg:p-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>        
+      <div className="flex flex-column p-3 lg:p-0" style={{ maxWidth: '1200px', margin: '0 auto' }}>        
         <div className="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-4 gap-3">
           <h2 className="text-2xl m-0">Customers</h2>
           <span className="p-input-icon-left p-input-icon-right w-full">

@@ -833,7 +833,7 @@ const CreateOrder = () => {
     );
 
     return (
-        <div className="flex flex-column p-3 lg:p-5 mb-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="flex flex-column p-3 lg:p-0 mb-5" style={{ maxWidth: '1200px', margin: '0 auto' }}>
             {(isConfirmingOrder) && <FullPageLoader />}
             <h2 className="text-2xl m-0 mb-3">Create Order</h2>
             <Card className="mb-4">
