@@ -30,6 +30,7 @@ interface PendingOrderItem {
     customerName: string;
     productID: string;
     productName: string;
+    productImage: string;
     productRef: string;
     deliveryDate: string;
     admsite_code: string;
@@ -71,6 +72,8 @@ const PendingSalesReport = () => {
     const [itemToDelete, setItemToDelete] = useState<PendingOrderItem | null>(null);
     const observer = useRef<IntersectionObserver | null>(null);
     const lastOrderRef = useRef<HTMLDivElement>(null);
+    const [showActions, setShowActions] = useState(false);
+    const toggleActions = () => setShowActions((prev) => !prev);
 
     const availableStatuses = [
         { id: 1, name: 'Pending' },
@@ -333,36 +336,67 @@ const PendingSalesReport = () => {
                 {orders.length > 0 ? (
                     orders.map((item, index) => (
                         <div key={`${item.order_id}-${item.id}`} className="col-12 md:col-6 lg:col-4" ref={index === orders.length - 1 ? lastOrderRef : null}>
-                            <Card className="h-full">
-                                <div className="flex flex-column gap-2">
-                                    <div className="flex justify-content-between align-items-center">
-                                        <span className="font-bold">{item.customerName}</span>
-                                        <Tag value={item.status} severity={getStatusSeverity(item.status)} />
-                                    </div>
-
-                                    <Divider className="my-2" />
-
-                                    <div className="flex flex-column gap-1">
-                                        <div className="flex justify-content-between">
-                                            <span className="text-600">Product:</span>
-                                            <span>{item.productName}</span>
-                                        </div>
-                                        <div className="flex justify-content-between">
-                                            <span className="text-600">Reference:</span>
-                                            <span>{item.productRef}</span>
-                                        </div>
-                                        <div className="flex justify-content-between">
-                                            <span className="text-600">Delivery Date:</span>
-                                            <span>{item.deliveryDate ? formatDate(item.deliveryDate) : 'Not scheduled'}</span>
-                                        </div>
-                                        <div className="flex justify-content-between">
-                                            <span className="text-600">JO Status:</span>
-                                            <Tag value={item.jobOrderStatus.length > 0 ? item.jobOrderStatus[0].status_name : 'Pending'} severity={getStatusSeverity(item.jobOrderStatus.length > 0 ? item.jobOrderStatus[0].status_name : 'Pending')} />
+                            <Card className="border-1 border-red-200 border-round-xl shadow-sm cursor-pointer transition-all hover:shadow-md border" onDoubleClick={toggleActions}>
+                                {/* Header */}
+                                <div className="flex items-start justify-content-between align-items-center mb-4 w-full">
+                                    <div className="flex align-items-center gap-3 w-full">
+                                        <img
+                                            src={item?.productImage}
+                                            alt={item?.productName?.slice(0, 2).toUpperCase()}
+                                            className="w-5rem h-4rem bg-yellow-100 text-blue-800 font-bold rounded-lg flex align-items-center justify-content-center text-sm border-round-xl border-yellow-800 border-2"
+                                        ></img>
+                                        <div className="flex justify-content-between align-items-center w-full">
+                                            <div className="">
+                                                <div className="flex gap-2 align-items-center mb-1">
+                                                    <i className="pi pi-user text-black-600 mr-1" />
+                                                    <p className="text-sm text-gray-700 font-semibold">New</p>
+                                                </div>
+                                                <p className="text-sm text-gray-500">Order No: {item.order_id}</p>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1">
+                                                <span className="text-sm font-semibold text-brown-700 flex items-center gap-1">
+                                                    <i className="pi pi-tag" /> Stitching
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <Divider className="my-2" />
+                                {/* Product Info */}
+                                <div className="flex justify-content-between align-items-center gap-2 mb-3 text-sm">
+                                    <div className="flex align-items-center gap-2">
+                                        <i className="pi pi-android text-blue-600" />
+                                        <span className="font-medium">{item.productName}</span>
+                                    </div>
+                                    <span className="bg-brown-100 text-brown-700 text-xs px-3 py-1 border-round-3xl border-2 ">{item.status}</span>
+                                </div>
 
+                                <Divider className="my-2" />
+
+                                {/* Dates */}
+                                <div className="flex flex-col gap-1 text-sm text-gray-600 my-3 flex-wrap column-gap-3 row-gap-2">
+                                    <div className="flex justify-content-between">
+                                        <span className="flex items-center gap-1">
+                                            <i className="pi pi-calendar" /> Trial:
+                                        </span>
+                                        <span>{item.trail_date ? formatDate(item.trialDate) : '11 Jun 2025'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="flex items-center gap-1">
+                                            <i className="pi pi-calendar-plus" /> Delivery:
+                                        </span>
+                                        <span>{item.deliveryDate ? formatDate(item.deliveryDate) : '12 Jun 2025'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="flex items-center gap-1">
+                                            <i className="pi pi-inbox" /> Received:
+                                        </span>
+                                        <span>{item.receivedDate ? formatDate(item.receivedDate) : '12 Jun 2025'}</span>
+                                    </div>
+                                </div>
+
+                                {/* Conditional Action Buttons */}
+                                {showActions && (
                                     <div className="flex flex-column gap-2 mt-3">
                                         <Button
                                             label={item.jobOrderStatus.length > 0 ? 'View Job Order' : 'Create Job Order'}
@@ -384,7 +418,7 @@ const PendingSalesReport = () => {
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                )}
                             </Card>
                         </div>
                     ))
