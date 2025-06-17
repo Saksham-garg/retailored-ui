@@ -891,40 +891,56 @@ const SalesOrder = () => {
             </div>
           </div>
         ) : selectedOrder ? (
-          <div className="p-fluid mt-3">
-            <div className="grid">
-              <div className="col-6">
-                <div className="field">
-                  <label>Customer</label>
-                  <p className="m-0 font-medium">{selectedOrder?.user?.fname}</p>
+          <div className="p-fluid mt-3 h-full">
+            <div className="flex flex-column gap-4 max-w-30rem">
+              <div>
+                <div className="flex w-full justify-content-between">
+                  <label className="p-text-secondary p-text-sm font-medium">Name</label>
+                  <p className="m-0 font-medium underline text-blue-500">{selectedOrder?.user?.fname}</p>
                 </div>
               </div>
-              <div className="col-6">
-                <div className="field">
-                  <label>Order Date</label>
+              <div>
+                <div className="flex w-full justify-content-between">
+                  <label className="p-text-secondary p-text-sm">Phone Number</label>
                   <p className="m-0 font-medium">{formatDate(new Date(selectedOrder.order_date))}</p>
                 </div>
               </div>
-              <div className="col-6">
-                <div className="field">
+              <div className="flex w-full justify-content-between">
+                  <label className="p-text-secondary p-text-sm font-medium">Order Number</label>
+                  <a href="#" className="p-text-primary font-medium p-text-sm p-d-flex p-ai-center" style={{ textDecoration: 'none' }}>
+                    8 <i className="pi pi-link p-ml-1" /> LINK ID
+                  </a>
+              </div>
+                <div className="flex w-full justify-content-between">
                   <label>Status</label>&nbsp;
                   <Tag 
                     value={selectedOrder.orderStatus?.status_name || 'Unknown'}
                     severity={getStatusSeverity(selectedOrder.orderStatus?.status_name) || undefined}
                     className="text-sm font-semibold"
                     style={{ minWidth: '6rem', textAlign: 'center' }}
-                  />
+                    />
                 </div>
-              </div>
-              <div className="col-6">
-                <div className="field">
-                  <label>Trial Date</label>
-                  <p className="m-0 font-medium">{selectedOrder.orderDetails?.some(item => item.trial_date) 
-                    ? formatDate(new Date(selectedOrder.orderDetails.find(item => item.trial_date)?.trial_date || '')) 
-                    : 'Not scheduled'}</p>
+            </div>
+
+            <Divider />
+            
+            <h5 className="m-0 mb-3">Order Details</h5>
+
+              <div className="mb-4 surface-50 border-round border-1 p-3">
+                <div className="flex justify-content-between font-semibold h-full">
+                      <div className="flex flex-column gap-3 col-8 p-0" >
+                     {selectedOrder.orderDetails?.map((item) => (
+                          <p className="m-0 font-medium text-blue-500" key={item.id}>{item.material?.name ? `#${item.material?.name} ` : 'Not Available'}</p>
+                        ))}
+                      </div>
+                    <div className="flex justify-content-end gap-4">
+                          <i className="text-blue-500 pi pi-print p-ml-1" style={{ fontSize: '1.25rem' }} />
+                          <p className="m-0 font-medium text-blue-500 underline">View</p>
+                      </div>
                 </div>
-              </div>
-              <div className="col-12">
+            </div>
+
+             <div className="col-12 mt-auto">
                 <div className="flex gap-2 mt-3">
                   <Button
                     label="Receive Payment"
@@ -941,115 +957,6 @@ const SalesOrder = () => {
                   />
                 </div>
               </div>
-            </div>
-
-            <Divider />
-            
-            <h5 className="m-0 mb-3">Order Items</h5>
-
-            {selectedOrder.orderDetails?.map((item) => (
-              <div key={item.id} className="mb-4 surface-50 p-3 border-round">
-                <div className="grid">
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Item Ref</label>
-                      <p className="m-0 font-medium">{item.item_ref || 'Not Available'}</p>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Job Order No</label>
-                      <p className="m-0 font-medium">{item.order_id}</p>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Item Name</label>
-                      <p className="m-0 font-medium">{item.material?.name || 'Not Available'}</p>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Jobber Name</label>
-                      <p className="m-0 font-medium">{item.jobOrderDetails?.[0]?.adminSite?.sitename || 'Not assigned'}</p>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Trial Date</label>
-                      <p className="m-0 font-medium">
-                        {item.trial_date ? formatDate(new Date(item.trial_date)) : 'Not scheduled'}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="field">
-                      <label>Amount</label>
-                      <p className="m-0 font-medium">₹ {item.item_amt || 0}</p>
-                    </div>
-                  </div>
-                  <div className="col-12 mt-2">
-                    <div className="grid align-items-start">
-                      <div className="col-9">
-                        <div className="field">
-                          <label>Notes</label>
-                          <p className="m-0 font-medium">{item.desc1 || 'No Notes Available'}</p>
-                        </div>
-                      </div>
-                      <div className="col-3 flex justify-content-end pt-4">
-                        <Button 
-                          icon="pi pi-pencil" 
-                          onClick={() => handleEditOrderDetail(item)}
-                          className="p-button-rounded p-button"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-12 mt-2">
-                    <Button
-                      label={`Status (${item.orderStatus?.status_name || 'Unknown'})`}
-                      icon="pi pi-sync"
-                      onClick={() => {
-                        setSelectedDetail(item);
-                        setStatusSidebarVisible(true);
-                      }}
-                      severity={getStatusSeverity(item.orderStatus?.status_name) || undefined}
-                    />
-                  </div>
-
-                  {item?.image_url && item.image_url.length > 0 && (
-                    <div className="col-12 mt-2">
-                      <Button 
-                        label={`View Images (${item.image_url.length})`} 
-                        icon="pi pi-image" 
-                        className="p-button-outlined"
-                        onClick={() => handleImagePreview(item.image_url)}
-                      />
-                    </div>
-                  )}
-
-                  <div className="col-12 mt-2">
-                    <Button 
-                      label="View Measurement Details" 
-                      icon="pi pi-eye" 
-                      className="p-button-outlined"
-                      onClick={() => handleViewMeasurement(item)}
-                    />
-                  </div>
-
-                  <div className="col-12 mt-2">
-                    <Button 
-                      label="Update Status"
-                      icon="pi pi-pencil" 
-                      onClick={() => openItemActionSidebar(item)}
-                      className="w-full"
-                    />
-                  </div>
-                  <Divider />
-                </div>
-              </div>
-            ))}
           </div>
         ) : (
           <div className="flex justify-content-center align-items-center" style={{ height: '200px' }}>
